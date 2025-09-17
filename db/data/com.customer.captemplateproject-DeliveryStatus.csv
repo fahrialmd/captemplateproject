@@ -1,0 +1,4 @@
+code,name,descr
+P,Pending,Order is created but not shipped
+S,Shipped,Order has been shipped
+D,Delivered,Order has been delivered

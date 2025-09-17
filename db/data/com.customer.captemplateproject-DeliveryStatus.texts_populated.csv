@@ -1,0 +1,4 @@
+code,locale,name,descr
+P,en,Pending,Waiting for shipment
+S,en,Shipped,In transit
+D,en,Delivered,Goods received

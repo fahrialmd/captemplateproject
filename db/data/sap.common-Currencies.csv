@@ -1,0 +1,5 @@
+code,symbol,minorUnit,name,descr
+USD,$,2,US Dollar,United States Dollar
+EUR,€,2,Euro,European Union currency
+JPY,¥,0,Japanese Yen,Japan currency
+IDR,Rp,0,Indonesian Rupiah,Indonesia currency
