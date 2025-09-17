@@ -1,32 +1,31 @@
 namespace com.customer.captemplateproject;
 
 using {
-    Currency,
-    managed,
-    cuid
+                           Currency,
+                           managed,
+                           cuid,
+    sap.common.CodeList as CodeList
 } from '@sap/cds/common';
 
 entity PurchaseOrderHeader : managed, cuid {
-    poNumber     : String(20);
-    poType       : String(4);
-    vendor       : Association to Vendor;
-    vendorNumber : String(10);
-    companyCode  : String(4);
-    plant        : String(4);
-    documentDate : Date;
-    deliveryDate : Date;
-    currency     : Currency;
-    totalAmount  : Decimal(15, 2) @Semantics.amount.currencyCode: 'currency';
-    status       : String(2);
-    items        : Composition of many PurchaseOrderItem
-                       on items.header = $self;
+    poNumber       : String(20);
+    poType         : String(4);
+    vendor         : Association to Vendor;
+    companyCode    : String(4);
+    plant          : String(4);
+    documentDate   : Date;
+    deliveryDate   : Date;
+    currency       : Currency;
+    totalAmount    : Decimal(15, 2) @Semantics.amount.currencyCode: 'currency';
+    deliveryStatus : Association to DeliveryStatus;
+    items          : Composition of many PurchaseOrderItem
+                         on items.header = $self;
 }
 
 entity PurchaseOrderItem : managed, cuid {
     header         : Association to PurchaseOrderHeader;
     itemNumber     : String(5);
     material       : Association to Material;
-    materialNumber : String(40);
     description    : String(80);
     quantity       : Decimal(13, 3);
     unit           : String(3);
@@ -34,7 +33,6 @@ entity PurchaseOrderItem : managed, cuid {
     netAmount      : Decimal(13, 2) @Semantics.amount.currencyCode: 'header.currency';
     deliveryDate   : Date;
     plant          : String(4);
-    status         : String(2);
 }
 
 entity Vendor : managed, cuid {
@@ -53,4 +51,12 @@ entity Material : managed, cuid {
     standardPrice  : Decimal(11, 2) @Semantics.amount.currencyCode: 'currency';
     poItems        : Association to many PurchaseOrderItem
                          on poItems.material = $self;
+}
+
+entity DeliveryStatus : CodeList {
+    key code : String(1) enum {
+            Pending = 'P';
+            Shipped = 'S';
+            Delivered = 'D';
+        } default 'P';
 }
