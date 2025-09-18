@@ -1,0 +1,15 @@
+{
+  "requires": {
+    "db": {
+      "kind": "postgres",
+      "impl": "@cap-js/postgres",
+      "credentials": {
+        "host": "localhost",
+        "port": 5432,
+        "database": "captest",
+        "user": "postgres",
+        "password": "secret"
+      }
+    }
+  }
+}

@@ -1,7 +1,14 @@
-
----
 spring:
-  config.activate.on-profile: default
-  sql.init.platform: h2
+  datasource:
+    password: secret
+    embedded-database-connection: none
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/captest
+    username: postgres
+  config:
+    activate:
+      on-profile: default
 cds:
-  data-source.auto-config.enabled: false
+  data-source:
+    auto-config:
+      enabled: true
