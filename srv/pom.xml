@@ -41,10 +41,23 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!--Easy
+		Excel-->
 		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
+			<groupId>com.alibaba</groupId>
+			<artifactId>easyexcel</artifactId>
+			<version>3.3.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sap.cds</groupId>
+			<artifactId>cds-starter-cloudfoundry</artifactId>
 			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -116,8 +129,8 @@
 						<configuration>
 							<commands>
 								<command>build --for java</command>
-								<command>deploy --to h2 --with-mocks --dry --out
-									"${project.basedir}/src/main/resources/schema-h2.sql"</command>
+								<command>deploy --to hana --dry &gt;
+									srv/src/main/resources/schema.sql</command>
 							</commands>
 						</configuration>
 					</execution>

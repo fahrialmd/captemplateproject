@@ -9,4 +9,6 @@ service PurchaseOrderService {
     entity Vendors            as projection on po.Vendor;
 
     entity Materials          as projection on po.Material;
+
+    entity Upload             as projection on po.Upload;
 }

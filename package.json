@@ -5,6 +5,12 @@
   "license": "ISC",
   "repository": "<Add your repository here>",
   "devDependencies": {
-    "@sap/cds-dk": "^9.1.0"
-  }
+    "@sap/cds-dk": "^9.3.2"
+  },
+  "dependencies": {
+    "@sap/cds": "^9.3.1"
+  },
+  "sapux": [
+    "app/purchaseordermanagement"
+  ]
 }

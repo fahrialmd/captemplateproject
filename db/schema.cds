@@ -23,16 +23,16 @@ entity PurchaseOrderHeader : managed, cuid {
 }
 
 entity PurchaseOrderItem : managed, cuid {
-    header         : Association to PurchaseOrderHeader;
-    itemNumber     : String(5);
-    material       : Association to Material;
-    description    : String(80);
-    quantity       : Decimal(13, 3);
-    unit           : String(3);
-    netPrice       : Decimal(11, 2) @Semantics.amount.currencyCode: 'header.currency';
-    netAmount      : Decimal(13, 2) @Semantics.amount.currencyCode: 'header.currency';
-    deliveryDate   : Date;
-    plant          : String(4);
+    header       : Association to PurchaseOrderHeader;
+    itemNumber   : String(5);
+    material     : Association to Material;
+    description  : String(80);
+    quantity     : Decimal(13, 3);
+    unit         : String(3);
+    netPrice     : Decimal(11, 2) @Semantics.amount.currencyCode: 'header.currency  ';
+    netAmount    : Decimal(13, 2) @Semantics.amount.currencyCode: 'header.currency';
+    deliveryDate : Date;
+    plant        : String(4);
 }
 
 entity Vendor : managed, cuid {
@@ -59,4 +59,9 @@ entity DeliveryStatus : CodeList {
             Shipped = 'S';
             Delivered = 'D';
         } default 'P';
+}
+
+@cds.persistence.skip
+entity Upload @odata.singleton {
+    PurchaseOrderItems : LargeBinary @Core.MediaType: 'application/octet-stream';
 }

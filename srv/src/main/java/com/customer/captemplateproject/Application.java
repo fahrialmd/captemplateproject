@@ -1,4 +1,4 @@
-package com.customer.captemplateproject.captemplateproject;
+package com.customer.captemplateproject;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
