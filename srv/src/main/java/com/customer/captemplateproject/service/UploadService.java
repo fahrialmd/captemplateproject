@@ -5,6 +5,8 @@ import java.util.Map;
 
 public interface UploadService {
 
-    public void uploadPurchaseOrderData(List<Map<Integer, String>> uploadData);
+    void uploadPurchaseOrderData(List<Map<Integer, String>> uploadData);
+
+    void processPurchaseOrderWithItems(Map<String, Object> headerData, List<Map<String, Object>> itemsData);
 
 }
