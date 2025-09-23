@@ -2,6 +2,13 @@ spring:
   config.activate.on-profile: default
   # sql.init.platform: h2
   web.resources.static-locations: file:./app/
+  main.allow-bean-definition-overriding: true
+  batch:
+    job:
+      enabled: false  # Prevent auto-start of batch jobs
+    jdbc:
+      initialize-schema: never  # We use HANA artifacts instead
+      table-prefix: BATCH_  # Match our HANA table names
 cds:
   data-source.auto-config.enabled: true
 ---
