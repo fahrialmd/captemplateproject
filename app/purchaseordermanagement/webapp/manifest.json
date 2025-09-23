@@ -121,6 +121,16 @@
                     "type": "ResponsiveTable"
                   }
                 }
+              },
+              "content": {
+                "header": {
+                  "actions": {
+                    "ImportProducts": {
+                      "press": "purchaseordermanagement.ext.controller.Upload.showUploadDialog",
+                      "text": "Import"
+                    }
+                  }
+                }
               }
             }
           }
@@ -137,16 +147,6 @@
                 "items": {
                   "detail": {
                     "route": "PurchaseOrderItemsObjectPage"
-                  }
-                }
-              },
-              "content": {
-                "header": {
-                  "actions": {
-                    "ImportProducts": {
-                      "press": "purchaseordermanagement.ext.controller.Upload.showUploadDialog",
-                      "text": "Import Items"
-                    }
                   }
                 }
               }

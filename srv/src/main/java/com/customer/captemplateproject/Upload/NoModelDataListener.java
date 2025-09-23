@@ -12,7 +12,6 @@ import com.sap.cds.ql.Upsert;
 import com.sap.cds.services.persistence.PersistenceService;
 
 import cds.gen.com.customer.captemplateproject.PurchaseOrderItem;
-
 import static cds.gen.purchaseorderservice.PurchaseOrderService_.PURCHASE_ORDER_ITEMS;
 
 public class NoModelDataListener extends AnalysisEventListener<Map<Integer, String>> {
@@ -74,9 +73,6 @@ public class NoModelDataListener extends AnalysisEventListener<Map<Integer, Stri
                         poitem.setDeliveryDate(LocalDate.parse(map.get(key)));
                         break;
                     case 9:
-                        poitem.setNetAmount(convertToBigDecimal(map.get(key)));
-                        break;
-                    case 10:
                         poitem.setPlant(map.get(key));
                         break;
                 }
