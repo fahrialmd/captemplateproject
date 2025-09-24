@@ -1,6 +1,5 @@
 package com.customer.captemplateproject.config;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.batch.core.Job;
@@ -18,10 +17,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
-
-import com.customer.captemplateproject.batch.ExcelItemReader;
-import com.customer.captemplateproject.batch.PurchaseOrderItemProcessor;
-import com.customer.captemplateproject.batch.PurchaseOrderItemWriter;
 
 @Configuration
 public class BatchConfiguration {

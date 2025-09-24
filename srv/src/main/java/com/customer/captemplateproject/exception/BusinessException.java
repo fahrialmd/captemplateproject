@@ -3,7 +3,6 @@ package com.customer.captemplateproject.exception;
 import com.sap.cds.services.ErrorStatuses;
 import com.sap.cds.services.ServiceException;
 
-// Rename from AIServiceException.java
 public class BusinessException extends ServiceException {
     public BusinessException(String message) {
         super(ErrorStatuses.BAD_REQUEST, message);

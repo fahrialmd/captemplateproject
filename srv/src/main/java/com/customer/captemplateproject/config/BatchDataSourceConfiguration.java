@@ -20,11 +20,7 @@ public class BatchDataSourceConfiguration {
         JobRepositoryFactoryBean factory = new JobRepositoryFactoryBean();
         factory.setDataSource(dataSource);
         factory.setTransactionManager(transactionManager);
-        factory.setTablePrefix("BATCH_"); // This matches your HANA table prefix
-
-        // Optional: Set isolation level if needed
-        // factory.setIsolationLevelForCreate("ISOLATION_READ_COMMITTED");
-
+        factory.setTablePrefix("BATCH_");
         factory.afterPropertiesSet();
         return factory.getObject();
     }

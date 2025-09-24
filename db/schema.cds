@@ -63,7 +63,7 @@ entity DeliveryStatus : CodeList {
 
 @cds.persistence.skip
 entity Upload @odata.singleton {
-    PurchaseOrderItems : LargeBinary @Core.MediaType: 'application/octet-stream';
+    PurchaseOrderData : LargeBinary @Core.MediaType: 'application/octet-stream';
 }
 
 @cds.persistence.skip

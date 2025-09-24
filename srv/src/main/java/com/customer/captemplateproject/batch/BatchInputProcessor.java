@@ -6,7 +6,7 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PurchaseOrderItemProcessor implements ItemProcessor<Map<Integer, String>, Map<Integer, String>> {
+public class BatchInputProcessor implements ItemProcessor<Map<Integer, String>, Map<Integer, String>> {
 
     @Override
     public Map<Integer, String> process(Map<Integer, String> item) throws Exception {
