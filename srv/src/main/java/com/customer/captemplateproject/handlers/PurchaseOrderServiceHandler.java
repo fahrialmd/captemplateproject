@@ -46,7 +46,6 @@ public class PurchaseOrderServiceHandler implements EventHandler {
     }
 
     @On
-    // @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void handleExcelUpload(CdsUpdateEventContext context, Upload upload) {
         InputStream inputStream = upload.getPurchaseOrderItems();
 
