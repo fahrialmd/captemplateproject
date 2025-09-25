@@ -12,7 +12,7 @@
                 id="uploader"
                 fileType="xlsx"
                 multiple="false"
-                uploadUrl="/odata/v4/PurchaseOrderService/Upload/PurchaseOrderItems"
+                uploadUrl="/odata/v4/PurchaseOrderService/Upload/PurchaseOrderData"
                 fileAllowed=".onFileAllowed"
                 fileEmpty=".onFileEmpty"
                 uploadComplete=".onUploadComplete"

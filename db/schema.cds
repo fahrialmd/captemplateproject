@@ -7,19 +7,19 @@ using {
     sap.common.CodeList as CodeList
 } from '@sap/cds/common';
 
-entity PurchaseOrderHeader : managed, cuid {
-    poNumber       : String(20);
-    poType         : String(4);
-    vendor         : Association to Vendor;
-    companyCode    : String(4);
-    plant          : String(4);
-    documentDate   : Date;
-    deliveryDate   : Date;
-    currency       : Currency;
-    totalAmount    : Decimal(15, 2) @Semantics.amount.currencyCode: 'currency';
-    deliveryStatus : Association to DeliveryStatus;
-    items          : Composition of many PurchaseOrderItem
-                         on items.header = $self;
+entity PurchaseOrderHeader : managed {
+    key poNumber       : String(20);
+        poType         : String(4);
+        vendor         : Association to Vendor;
+        companyCode    : String(4);
+        plant          : String(4);
+        documentDate   : Date;
+        deliveryDate   : Date;
+        currency       : Currency;
+        totalAmount    : Decimal(15, 2) @Semantics.amount.currencyCode: 'currency';
+        deliveryStatus : Association to DeliveryStatus;
+        items          : Composition of many PurchaseOrderItem
+                             on items.header = $self;
 }
 
 entity PurchaseOrderItem : managed {
@@ -63,5 +63,5 @@ entity DeliveryStatus : CodeList {
 
 @cds.persistence.skip
 entity Upload @odata.singleton {
-    PurchaseOrderItems : LargeBinary @Core.MediaType: 'application/octet-stream';
+    PurchaseOrderData : LargeBinary @Core.MediaType: 'application/octet-stream';
 }
