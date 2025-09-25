@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.batch.core.Job;
@@ -16,15 +15,16 @@ import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.customer.captemplateproject.batch.BatchInputReader;
 import com.customer.captemplateproject.exception.BusinessException;
 import com.customer.captemplateproject.service.UploadService;
 
+import cds.gen.purchaseorderservice.PurchaseOrderItems;
 import cds.gen.purchaseorderservice.PurchaseOrders;
 import cds.gen.purchaseorderservice.Upload;
-import cds.gen.purchaseorderservice.PurchaseOrderItems;
 
 @Service
 public class UploadServiceImpl implements UploadService {
@@ -33,16 +33,19 @@ public class UploadServiceImpl implements UploadService {
     private final JobLauncher asyncJobLauncher;
     private final Job excelUploadJob;
     private final BatchInputReader batchInputReader;
+    private final BatchProcessingService batchProcessingService;
 
     public UploadServiceImpl(
             GenericCqnService genericCqnService,
             @Qualifier("asyncJobLauncher") JobLauncher asyncJobLauncher,
-            Job excelUploadJob,
-            BatchInputReader batchInputReader) {
+            @Lazy Job excelUploadJob,
+            BatchInputReader batchInputReader,
+            BatchProcessingService batchProcessingService) {
         this.genericCqnService = genericCqnService;
         this.asyncJobLauncher = asyncJobLauncher;
         this.excelUploadJob = excelUploadJob;
         this.batchInputReader = batchInputReader;
+        this.batchProcessingService = batchProcessingService;
     }
 
     @Override
@@ -77,8 +80,6 @@ public class UploadServiceImpl implements UploadService {
             // Group rows by poNumber to separate headers from items
             Map<String, List<Map<Integer, String>>> groupedByPoNumber = uploadData.stream()
                     .collect(Collectors.groupingBy(row -> row.get(0)));
-            // Check if poNumber is already exist
-            String currentPONumber = "";
             // Loop the data
             for (Map.Entry<String, List<Map<Integer, String>>> entry : groupedByPoNumber.entrySet()) {
                 // Get PO header number
@@ -87,33 +88,23 @@ public class UploadServiceImpl implements UploadService {
                 List<Map<Integer, String>> rows = entry.getValue();
                 // Get header data from row
                 Map<Integer, String> header = rows.get(0);
-                // Create purchaseOrderData variable
+                // Create new PO header data
                 PurchaseOrders purchaseOrderData = PurchaseOrders.create();
-                // Only fetch purchase order data when processing a different PO number
-                if (currentPONumber.isEmpty() || !currentPONumber.equals(poNumber)) {
-                    currentPONumber = poNumber;
-                    purchaseOrderData = genericCqnService
-                            .checkAndGetPurchaseOrderById(currentPONumber);
-                }
-                // Create new PO header data if there is no existing PO data
-                Boolean isHeaderEmpty = purchaseOrderData.isEmpty();
-                if (isHeaderEmpty) {
-                    purchaseOrderData.setPoNumber(header.get(0));
-                    purchaseOrderData.setPoType(header.get(1));
-                    purchaseOrderData.setVendorId(header.get(2));
-                    purchaseOrderData.setCompanyCode(header.get(3));
-                    purchaseOrderData.setPlant(header.get(4));
-                    purchaseOrderData.setDocumentDate(LocalDate.parse(header.get(5)));
-                    purchaseOrderData.setDeliveryDate(LocalDate.parse(header.get(6)));
-                    purchaseOrderData.setCurrencyCode(header.get(7));
-                    purchaseOrderData.setTotalAmount(convertToBigDecimal(header.get(8)));
-                    purchaseOrderData.setDeliveryStatusCode(header.get(9));
-                }
+                purchaseOrderData.setPoNumber(header.get(0));
+                purchaseOrderData.setPoType(header.get(1));
+                purchaseOrderData.setVendorId(header.get(2));
+                purchaseOrderData.setCompanyCode(header.get(3));
+                purchaseOrderData.setPlant(header.get(4));
+                purchaseOrderData.setDocumentDate(LocalDate.parse(header.get(5)));
+                purchaseOrderData.setDeliveryDate(LocalDate.parse(header.get(6)));
+                purchaseOrderData.setCurrencyCode(header.get(7));
+                purchaseOrderData.setTotalAmount(convertToBigDecimal(header.get(8)));
+                purchaseOrderData.setDeliveryStatusCode(header.get(9));
                 // Create new PO item data
                 List<PurchaseOrderItems> purchaseOrderItemData = new ArrayList<>();
                 for (Map<Integer, String> row : rows) {
                     PurchaseOrderItems item = PurchaseOrderItems.create();
-                    item.setHeaderId(poNumber);
+                    item.setHeaderPoNumber(poNumber);
                     item.setItemNumber(row.get(10));
                     item.setMaterialId(row.get(11));
                     item.setDescription(row.get(12));
@@ -126,12 +117,8 @@ public class UploadServiceImpl implements UploadService {
                     purchaseOrderItemData.add(item);
                 }
                 purchaseOrderData.setItems(purchaseOrderItemData);
-                // Insert the row data into header entity or just update the item
-                if (isHeaderEmpty) {
-                    genericCqnService.insertPurchaseOrderData(purchaseOrderData);
-                } else {
-                    genericCqnService.insertPurchaseOrderItem(purchaseOrderData.getItems());
-                }
+                // Add data to BatchProcessingService object for cached based insert logic
+                batchProcessingService.processPurchaseOrderData(purchaseOrderData);
             }
         } catch (Exception e) {
             throw new BusinessException("Failed to upload purchase order data: " + e.getMessage(), e);
