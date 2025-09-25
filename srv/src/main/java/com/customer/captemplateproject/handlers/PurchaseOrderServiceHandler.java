@@ -34,7 +34,7 @@ public class PurchaseOrderServiceHandler implements EventHandler {
 
     @On
     public void handleExcelUpload(CdsUpdateEventContext context, Upload upload) {
-        InputStream is = upload.getPurchaseOrderItems();
+        InputStream is = upload.getPurchaseOrderData();
         if (is != null) {
             // Process Excel file using EasyExcel
             EasyExcel.read(is, new NoModelDataListener(uploadService)).sheet().doRead();

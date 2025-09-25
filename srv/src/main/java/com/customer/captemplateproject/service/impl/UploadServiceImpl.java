@@ -75,7 +75,7 @@ public class UploadServiceImpl implements UploadService {
         List<PurchaseOrderItems> items = new ArrayList<>();
         for (Map<Integer, String> row : rows) {
             PurchaseOrderItems item = PurchaseOrderItems.create();
-            item.setHeaderId(poNumber);
+            item.setHeaderPoNumber(poNumber);
             item.setItemNumber(row.get(10));
             item.setMaterialId(row.get(11));
             item.setDescription(row.get(12));

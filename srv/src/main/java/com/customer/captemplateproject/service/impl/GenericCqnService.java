@@ -36,13 +36,13 @@ public class GenericCqnService {
     }
 
     public PurchaseOrders getPurchaseOrderById(String id) {
-        var select = Select.from(PurchaseOrders_.class).where(m -> m.ID().eq(id));
+        var select = Select.from(PurchaseOrders_.class).where(m -> m.poNumber().eq(id));
         return entityService.selectSingle(purchaseOrderService, select, PurchaseOrders.class,
                 "MaterialHeader data not found: " + id);
     }
 
     public PurchaseOrders checkAndGetPurchaseOrderById(String id) {
-        var select = Select.from(PurchaseOrders_.class).where(m -> m.ID().eq(id));
+        var select = Select.from(PurchaseOrders_.class).where(m -> m.poNumber().eq(id));
         PurchaseOrders result = PurchaseOrders.create();
         try {
             result = entityService.selectSingle(purchaseOrderService, select, PurchaseOrders.class,
