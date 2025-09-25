@@ -3,10 +3,11 @@ package com.customer.captemplateproject.service;
 import java.util.List;
 import java.util.Map;
 
+import cds.gen.purchaseorderservice.Upload;
+
 public interface UploadService {
 
-    void uploadPurchaseOrderData(List<Map<Integer, String>> uploadData);
+    public void processExcelBatchInput(Upload upload);
 
-    void processPurchaseOrderWithItems(Map<String, Object> headerData, List<Map<String, Object>> itemsData);
-
+    public void processPurchaseOrderData(List<Map<Integer, String>> uploadData);
 }

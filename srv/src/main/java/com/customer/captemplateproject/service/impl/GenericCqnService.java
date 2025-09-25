@@ -1,10 +1,10 @@
 package com.customer.captemplateproject.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.sap.cds.Result;
 import com.sap.cds.ql.Select;
 
 import cds.gen.purchaseorderservice.PurchaseOrderItems;
@@ -36,21 +36,19 @@ public class GenericCqnService {
     }
 
     public PurchaseOrders getPurchaseOrderById(String id) {
-        var select = Select.from(PurchaseOrders_.class).where(m -> m.poNumber().eq(id));
+        var select = Select.from(PurchaseOrders_.class)
+                .where(m -> m.poNumber().eq(id));
         return entityService.selectSingle(purchaseOrderService, select, PurchaseOrders.class,
                 "MaterialHeader data not found: " + id);
     }
 
-    public PurchaseOrders checkAndGetPurchaseOrderById(String id) {
-        var select = Select.from(PurchaseOrders_.class).where(m -> m.poNumber().eq(id));
-        PurchaseOrders result = PurchaseOrders.create();
-        try {
-            result = entityService.selectSingle(purchaseOrderService, select, PurchaseOrders.class,
-                    "MaterialHeader data not found: " + id);
-            return result;
-        } catch (Exception e) {
-            return result;
-        }
+    public List<PurchaseOrders> initializePODataCaching() {
+        var select = Select.from(PurchaseOrders_.class)
+                .columns(po -> po.poNumber(),
+                        po -> po.items().expand(
+                                item -> item.itemNumber()));
+        // Run the query and map to PurchaseOrders
+        return entityService.selectList(purchaseOrderService, select, PurchaseOrders.class);
     }
 
     public void insertPurchaseOrderData(PurchaseOrders data) {
