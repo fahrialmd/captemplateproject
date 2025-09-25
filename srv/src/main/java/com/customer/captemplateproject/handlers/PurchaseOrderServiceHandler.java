@@ -2,11 +2,18 @@ package com.customer.captemplateproject.handlers;
 
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.JobParameter;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import com.alibaba.excel.EasyExcel;
-import com.customer.captemplateproject.Upload.NoModelDataListener;
+import com.customer.captemplateproject.batch.BatchInputReader;
 import com.customer.captemplateproject.service.UploadService;
 import com.sap.cds.services.cds.CdsUpdateEventContext;
 import com.sap.cds.services.cds.CqnService;
@@ -32,13 +39,10 @@ public class PurchaseOrderServiceHandler implements EventHandler {
         return Upload.create();
     }
 
-    @On
+    @On(entity = Upload_.CDS_NAME, event = CqnService.EVENT_UPDATE)
     public void handleExcelUpload(CdsUpdateEventContext context, Upload upload) {
-        InputStream is = upload.getPurchaseOrderData();
-        if (is != null) {
-            // Process Excel file using EasyExcel
-            EasyExcel.read(is, new NoModelDataListener(uploadService)).sheet().doRead();
-        }
+        uploadService.processExcelBatchInput(upload);
         context.setResult(Arrays.asList(upload));
     }
+
 }
